@@ -18,9 +18,13 @@ package io.jsonwebtoken
 import io.jsonwebtoken.impl.DefaultClock
 import io.jsonwebtoken.impl.FixedClock
 import io.jsonwebtoken.impl.TextCodec
+import io.jsonwebtoken.impl.crypto.RsaProvider
 import org.junit.Test
 
 import javax.crypto.spec.SecretKeySpec
+import java.security.KeyPair
+import java.security.PrivateKey
+import java.security.PublicKey
 import java.security.SecureRandom
 
 import static org.junit.Assert.*
@@ -52,6 +56,23 @@ class JwtParserTest {
             fail()
         } catch (IllegalStateException ise) {
             assertEquals ise.getMessage(), 'A key object and key bytes cannot both be specified. Choose either.'
+        }
+    }
+
+    @Test
+    void testKeyBytesWithRsa() {
+        KeyPair kp = RsaProvider.generateKeyPair(1024)
+        PublicKey publicKey = kp.getPublic();
+        PrivateKey privateKey = kp.getPrivate();
+
+        String compact = Jwts.builder().setPayload("Hello, world!").signWith(SignatureAlgorithm.RS256, privateKey).compact();
+
+        byte[] keyBytes = randomKey()
+
+        try {
+            Jwts.parser().setSigningKey(keyBytes).parse(compact)
+            fail()
+        } catch (Exception e) {
         }
     }
 

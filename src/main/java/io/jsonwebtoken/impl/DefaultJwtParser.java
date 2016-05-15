@@ -318,10 +318,6 @@ public class DefaultJwtParser implements JwtParser {
                 }
 
                 if (!Objects.isEmpty(keyBytes)) {
-
-                    Assert.isTrue(!algorithm.isRsa(),
-                                  "Key bytes cannot be specified for RSA signatures.  Please specify a PublicKey or PrivateKey instance.");
-
                     key = new SecretKeySpec(keyBytes, algorithm.getJcaName());
                 }
             }
