@@ -307,8 +307,6 @@ public class DefaultJwtParser implements JwtParser {
 
             if (key == null) { //fall back to keyBytes
 
-                byte[] keyBytes = this.keyBytes;
-
                 if (signingKeyResolver != null) { //use the signingKeyResolver
                     if (claims != null) {
                         key = signingKeyResolver.resolveSigningKey(jwsHeader, claims);
