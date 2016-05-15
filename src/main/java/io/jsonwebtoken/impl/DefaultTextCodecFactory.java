@@ -29,9 +29,9 @@ public class DefaultTextCodecFactory implements TextCodecFactory {
             return lcase.contains("dalvik");
         }
 
-        name = getSystemProperty("java.vm.vendor");
-        if (name != null) {
-            String lcase = name.toLowerCase();
+        String vendor = getSystemProperty("java.vm.vendor");
+        if (vendor != null) {
+            String lcase = vendor.toLowerCase();
             return lcase.contains("android");
         }
 
