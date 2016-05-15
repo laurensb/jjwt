@@ -347,6 +347,8 @@ public class DefaultJwtParser implements JwtParser {
             }
         }
 
+        Object body;
+
         //since 0.3:
         if (claims != null) {
 
@@ -385,9 +387,11 @@ public class DefaultJwtParser implements JwtParser {
             }
 
             validateExpectedClaims(header, claims);
-        }
 
-        Object body = claims != null ? claims : payload;
+            body = claims;
+        } else {
+            body = payload;
+        }
 
         if (base64UrlEncodedDigest != null) {
             return new DefaultJws<Object>((JwsHeader) header, body, base64UrlEncodedDigest);
