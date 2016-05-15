@@ -164,6 +164,27 @@ class JwtParserTest {
     }
 
     @Test
+    void testParseTruncatedSignature() {
+        byte[] key = randomKey()
+        String payload = 'Hello world!'
+
+        String compact = Jwts.builder().setPayload(payload).signWith(SignatureAlgorithm.HS256, key).compact()
+
+        String[] components = compact.split("\\.");
+
+        String jwtWithoutSignature = components[0] + "." + components[1] + ".";
+
+        assertFalse Jwts.parser().setSigningKey(key).isSigned(jwtWithoutSignature)
+
+        try {
+            Jwt<Header, String> jwt = Jwts.parser().setSigningKey(key).parse(jwtWithoutSignature)
+
+            fail "Signature validation should fail because of missing signature"
+        } catch (Exception e) {
+        }
+    }
+
+    @Test
     void testParseWithExpiredJwt() {
 
         Date exp = new Date(System.currentTimeMillis() - 1000)
