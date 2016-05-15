@@ -309,16 +309,16 @@ public class DefaultJwtParser implements JwtParser {
 
                 byte[] keyBytes = this.keyBytes;
 
-                if (Objects.isEmpty(keyBytes) && signingKeyResolver != null) { //use the signingKeyResolver
+                if (signingKeyResolver != null) { //use the signingKeyResolver
                     if (claims != null) {
                         key = signingKeyResolver.resolveSigningKey(jwsHeader, claims);
                     } else {
                         key = signingKeyResolver.resolveSigningKey(jwsHeader, payload);
                     }
-                }
-
-                if (!Objects.isEmpty(keyBytes)) {
-                    key = new SecretKeySpec(keyBytes, algorithm.getJcaName());
+                } else {
+                    if (!Objects.isEmpty(keyBytes)) {
+                        key = new SecretKeySpec(keyBytes, algorithm.getJcaName());
+                    }
                 }
             }
 
