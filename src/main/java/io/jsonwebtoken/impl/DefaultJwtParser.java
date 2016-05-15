@@ -351,6 +351,13 @@ public class DefaultJwtParser implements JwtParser {
                              "asserted and should not be trusted.";
                 throw new SignatureException(msg);
             }
+        } else {
+            boolean isSignatureKeySet = this.key != null | this.keyBytes != null | this.signingKeyResolver != null;
+
+            if (isSignatureKeySet) {
+                String msg = "Signing key set, but not signature found";
+                throw new SignatureException(msg);
+            }
         }
 
         //since 0.3:
